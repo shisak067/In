@@ -99,3 +99,16 @@ async def send_result(update, result, query, service_name, user_id, mongo):
 
 ```json
 {json.dumps(result, indent=2, ensure_ascii=False)}
+╚══════════════════════════════════════╝
+
+💡 Click DOWNLOAD button below
+
+👑 Developer: @{DEVELOPER_USERNAME}
+"""
+await update.message.reply_text(output, parse_mode=ParseMode.MARKDOWN, reply_markup=get_download_keyboard())
+
+can, remaining, _ = can_search(mongo, user_id)
+user = get_user(mongo, user_id)
+from utils.helpers import has_unlimited_coins
+info = f"\n\n👑 Unlimited" if has_unlimited_coins(user_id) else f"\n📊 Free left: {remaining}\n💰 Coins: {user['coins']}"
+await update.message.reply_text(info, parse_mode=ParseMode.MARKDOWN, reply_markup=get_main_keyboard(user_id))
